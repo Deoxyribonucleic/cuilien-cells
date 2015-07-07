@@ -1,0 +1,16 @@
+env = Environment(CPPPATH=["."], CCFLAGS="-std=c99")
+
+
+# Source section
+sources = Split("""
+main.c
+""")
+
+
+# Object section
+objects = env.Object(source = sources)
+
+
+# Target section
+binary = env.Program(target = "bin", source = objects)
+
