@@ -39,6 +39,16 @@ void move(c_cpu_t* cpu)
 
 void eat(c_cpu_t* cpu)
 {
+	if(world_remove_food(world, current_cell->x, current_cell->y))
+	{
+		if(current_cell->mass < 255)
+			++current_cell->mass;
+		cpu->context->reg.a = 1;
+	}
+	else
+	{
+		cpu->context->reg.a = 0;
+	}
 }
 
 void get_mass(c_cpu_t* cpu)

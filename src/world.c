@@ -40,3 +40,16 @@ tile_t const* world_get_tile_const(world_t const* world, int x, int y)
 	return &world->grid[y * WORLD_WIDTH + x];
 }
 
+int world_remove_food(world_t* world, int x, int y)
+{
+	tile_t* tile = &world->grid[y * WORLD_WIDTH + x];
+	if(tile->food)
+	{
+		return tile->food--;
+	}
+	else
+	{
+		return 0;
+	}
+}
+

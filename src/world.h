@@ -20,5 +20,6 @@ typedef struct world
 int world_load(world_t** world, char const* filename);
 tile_t* world_get_tile(world_t* world, int x, int y);
 tile_t const* world_get_tile_const(world_t const* world, int x, int y);
+int world_remove_food(world_t* world, int x, int y);
 
 #endif
