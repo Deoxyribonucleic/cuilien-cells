@@ -79,6 +79,10 @@ void graphics_render_cell(cell_t const* cell)
 	((uint32_t*)graphics.screen->pixels)[cell->y * graphics.screen->w + cell->x] = cell->color;
 }
 
+void graphics_update_world_image(int x, int y, tile_t const* tile)
+{
+	((uint32_t*)graphics.terrain->pixels)[y * WORLD_WIDTH + x] = GRAY(tile->food * 3);
+}
 
 void graphics_init_world_image(world_t const* world)
 {
@@ -88,12 +92,7 @@ void graphics_init_world_image(world_t const* world)
 	for(y = 0; y<WORLD_HEIGHT; ++y)
 		for(x = 0; x<WORLD_WIDTH; ++x)
 		{
-			((uint32_t*)graphics.terrain->pixels)[y * WORLD_WIDTH + x] = GRAY(world_get_tile_const(world, x, y)->food);
+			graphics_update_world_image(x, y, world_get_tile_const(world, x, y));
 		}
-}
-
-void graphics_update_world_image(int x, int y, tile_t const* tile)
-{
-	((uint32_t*)graphics.terrain->pixels)[y * WORLD_WIDTH + x] = GRAY(tile->food);
 }
 

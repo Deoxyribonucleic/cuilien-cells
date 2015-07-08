@@ -16,6 +16,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 
 cell_t* current_cell = NULL;
@@ -55,20 +56,45 @@ int main(int argc, char** args)
 	world_load(&world, "terrain.bmp");
 	graphics_init_world_image(world);
 
-	printf("Spawning test cell.\n");
-	cell_t test_cell;
-	cell_create(&test_cell, seed, 0x00ff00, 5, 100, 100);
-	cpu->context = &test_cell.process.context;
-	current_cell = &test_cell;
+	printf("Spawning inital cells...\n");
+	cells_init();
+
+	cell_spawn(c_mem_copy(seed), 0x00ff00, 5, 180, 180);
+	cell_spawn(c_mem_copy(seed), 0xff0000, 5, 500, 180);
+	
+	printf("Ready.\n");
 	
 	while(!graphics_update())
 	{
-		c_cpu_step(cpu);
-		
-		graphics_render_cell(&test_cell);
+		// simulate and render cells
+		/* this turned out messier than I had envisioned it */
+		int i = 0;
+		while((current_cell = cell_next(&i)))
+		{
+			cpu->context = &current_cell->process.context;
+
+			assert(cpu->context != NULL);
+			assert(cpu->context->memory != NULL);
+
+			int step;
+			for(step = 0; step < 100; ++step)
+			{
+				c_cpu_step(cpu);
+			}
+			
+			// mass decay
+			--current_cell->mass;
+
+			graphics_render_cell(current_cell);
+
+			if(!current_cell->alive)
+				cell_kill(current_cell); // how do you kill... that which has no life?
+		}
 	}
 	
-	cell_destroy(&test_cell);
+	printf("Freeing memory...\n");
+	cells_free();
+	c_mem_free(seed);
 	
 	printf("Destroying graphics...\n");
 	if((error = graphics_destroy()))

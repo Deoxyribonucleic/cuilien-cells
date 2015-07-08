@@ -21,16 +21,20 @@ void move(c_cpu_t* cpu)
 	switch(cpu->context->reg.a % 4)
 	{
 	case 0:
-		++current_cell->x;
+		if(++current_cell->x >= WORLD_WIDTH)
+			current_cell->x = WORLD_WIDTH - 1;
 		break;
 	case 1:
-		++current_cell->y;
+		if(++current_cell->y >= WORLD_HEIGHT)
+			current_cell->y = WORLD_HEIGHT - 1;
 		break;
 	case 2:
-		--current_cell->x;
+		if(--current_cell->x < 0)
+			current_cell->x = 0;
 		break;
 	case 3:
-		--current_cell->y;
+		if(--current_cell->y < 0)
+			current_cell->y = 0;
 		break;
 	default:
 		break;
@@ -58,7 +62,19 @@ void get_mass(c_cpu_t* cpu)
 
 void split(c_cpu_t* cpu)
 {
-	printf("split\n");
+	printf("Split\n");
+	if(current_cell->mass > 5) // arbitrary threshold
+	{
+		int half_mass = current_cell->mass / 2;
+		current_cell->mass -= half_mass;
+
+		int x = current_cell->x + 1;
+		if(x >= WORLD_WIDTH)
+			x -= 2;
+
+		cell_spawn(c_mem_copy(current_cell->process.context.memory),
+					current_cell->color, half_mass, x, current_cell->y);
+	}
 }
 
 

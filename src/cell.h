@@ -11,11 +11,20 @@ typedef struct cell
 	c_process_t process;
 	int x, y;
 	uint32_t color;
-	uint8_t mass;
+	union
+	{
+		uint8_t mass;
+		uint8_t alive;
+	};
 } cell_t;
 
-int cell_create(cell_t* cell, c_mem_handle program, uint32_t color, uint8_t mass, int x, int y);
-int cell_destroy(cell_t* cell);
+cell_t* cell_spawn(c_mem_handle program, uint32_t color, uint8_t mass, int x, int y);
+int cell_kill(cell_t* cell);
+
+cell_t* cell_next(int* i);
+
+void cells_init();
+void cells_free();
 
 #endif
 
