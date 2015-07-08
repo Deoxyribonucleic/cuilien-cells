@@ -5,6 +5,9 @@ env = Environment(CPPPATH=[".", "../cuilien"], CCFLAGS="-std=c99", LIBPATH="../c
 sources = Split("""
 main.c
 graphics.c
+cell.c
+world.c
+interaction.c
 """)
 
 
