@@ -1,9 +1,10 @@
-env = Environment(CPPPATH=["."], CCFLAGS="-std=c99")
+env = Environment(CPPPATH=[".", "../cuilien"], CCFLAGS="-std=c99", LIBPATH="../cuilien/build")
 
 
 # Source section
 sources = Split("""
 main.c
+graphics.c
 """)
 
 
@@ -12,5 +13,5 @@ objects = env.Object(source = sources)
 
 
 # Target section
-binary = env.Program(target = "bin", source = objects)
+binary = env.Program(target = "bin", source = objects, LIBS = ["cuilien", "SDL"])
 
