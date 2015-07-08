@@ -92,3 +92,8 @@ void graphics_init_world_image(world_t const* world)
 		}
 }
 
+void graphics_update_world_image(int x, int y, tile_t const* tile)
+{
+	((uint32_t*)graphics.terrain->pixels)[y * WORLD_WIDTH + x] = GRAY(tile->food);
+}
+

@@ -2,6 +2,8 @@
 
 #include "SDL/SDL.h"
 
+#include "graphics.h"
+
 
 int world_load(world_t** world, char const* filename)
 {
@@ -45,6 +47,7 @@ int world_remove_food(world_t* world, int x, int y)
 	tile_t* tile = &world->grid[y * WORLD_WIDTH + x];
 	if(tile->food)
 	{
+		graphics_update_world_image(x, y, tile);
 		return tile->food--;
 	}
 	else
