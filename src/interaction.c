@@ -63,9 +63,9 @@ void get_mass(c_cpu_t* cpu)
 
 void split(c_cpu_t* cpu)
 {
-	printf("Split\n");
 	if(current_cell->mass > 5 && cells_get_count() != MAX_CELLS) // arbitrary threshold
 	{
+		printf("Split\n");
 		int half_mass = current_cell->mass / 2;
 		current_cell->mass -= half_mass;
 
