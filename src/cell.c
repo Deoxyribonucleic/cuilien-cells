@@ -28,6 +28,7 @@ cell_t* cell_spawn(c_mem_handle dna, uint16_t generation, uint32_t color, uint8_
 	cell->process.context.memory = dna;
 	cell->color = color;
 	cell->mass = mass;
+	cell->alive = 1;
 	cell->x = x;
 	cell->y = y;
 
@@ -49,6 +50,17 @@ cell_t* cell_spawn(c_mem_handle dna, uint16_t generation, uint32_t color, uint8_
 }
 
 int cell_kill(cell_t* cell)
+{
+	cell->alive = 0;
+	cell->death = time;
+
+	if(!cell->save)
+		cell_free(cell);
+
+	return 0;
+}
+
+int cell_free(cell_t* cell)
 {
 	c_mem_free(cell->process.context.memory);
 	cell->alive = 0;
@@ -88,7 +100,7 @@ void cells_free()
 	cell_t* cell;
 	while((cell = cell_next(&i)))
 	{
-		cell_kill(cell);
+		cell_free(cell);
 	}
 }
 

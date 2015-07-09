@@ -118,12 +118,9 @@ int main(int argc, char** args)
 				champion_cell = current_cell;
 			}
 
-			if(!current_cell->alive)
+			if(!current_cell->mass)
 			{
-				current_cell->death = time;
-				
-				if(!current_cell->save)
-					cell_kill(current_cell); // how do you kill... that which has no life?
+				cell_kill(current_cell);
 			}
 		}
 
