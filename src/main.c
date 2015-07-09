@@ -96,19 +96,6 @@ int main(int argc, char** args)
 				c_cpu_step(cpu);
 			}
 
-			graphics_render_cell(current_cell);
-
-			if(current_cell != champion_cell &&
-					cell_lifetime(current_cell) > cell_lifetime(champion_cell))
-			{
-				champion_cell->save = false;
-				if(!champion_cell->alive)
-					cell_kill(champion_cell);
-
-				current_cell->save = true;
-				champion_cell = current_cell;
-			}
-
 			if(current_cell->mass)
 			{
 				/* mass decay */
@@ -122,7 +109,22 @@ int main(int argc, char** args)
 					graphics_update_world_image(current_cell->x, current_cell->y, tile);
 				}
 			}
-			else
+
+			graphics_render_cell(current_cell);
+
+			if(current_cell != champion_cell &&
+					cell_lifetime(current_cell) >= cell_lifetime(champion_cell))
+			{
+				champion_cell->save = false;
+				if(!champion_cell->alive)
+					cell_kill(champion_cell);
+
+				current_cell->save = true;
+				champion_cell = current_cell;
+			}
+
+			if(current_cell->mass == 0 ||
+					cell_lifetime(current_cell) > 1000) /* test death by age */
 				cell_kill(current_cell);
 		}
 
