@@ -133,6 +133,8 @@ int main(int argc, char** args)
 	else
 		printf(" * Time of death: %d\n", champion_cell->death);
 	printf(" * Place of death: %d, %d\n", champion_cell->x, champion_cell->y);
+	c_mem_dump_to_file(champion_cell->process.context.memory, "champion.dump");
+	printf("Memory dumped to champion.dump.\n");
 	
 	printf("Freeing memory...\n");
 	cells_free();

@@ -5,7 +5,7 @@
 #include "vm/process.h"
 #include "vm/mem.h"
 
-#define MAX_CELLS	500
+#define MAX_CELLS	1000
 
 
 typedef struct cell
