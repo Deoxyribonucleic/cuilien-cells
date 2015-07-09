@@ -39,6 +39,11 @@ void eat(c_cpu_t* cpu)
 	}
 }
 
+void check_food(c_cpu_t* cpu)
+{
+	cpu->context->reg.a = world_get_tile(world, current_cell->x, current_cell->y)->food ? 1 : 0;
+}
+
 void get_mass(c_cpu_t* cpu)
 {
 	cpu->context->reg.a = current_cell->mass;
@@ -50,7 +55,7 @@ void split(c_cpu_t* cpu)
 }
 
 
-c_interrupt_handler_t handlers[] = {random, move, eat, get_mass, split};
+c_interrupt_handler_t handlers[] = {random, move, eat, get_mass, split, check_food};
 static c_interrupt_vector_table_t ivt =
 {
 	handlers,

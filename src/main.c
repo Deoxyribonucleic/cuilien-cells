@@ -95,15 +95,6 @@ int main(int argc, char** args)
 			{
 				c_cpu_step(cpu);
 			}
-			
-			// mass decay
-			--current_cell->mass;
-			tile_t* tile = world_get_tile(world, current_cell->x, current_cell->y);
-			if(tile->waste != 255)
-			{
-				++tile->waste;
-				graphics_update_world_image(current_cell->x, current_cell->y, tile);
-			}
 
 			graphics_render_cell(current_cell);
 
@@ -118,10 +109,21 @@ int main(int argc, char** args)
 				champion_cell = current_cell;
 			}
 
-			if(!current_cell->mass)
+			if(current_cell->mass)
 			{
-				cell_kill(current_cell);
+				/* mass decay */
+				--current_cell->mass;
+			
+				/* produce waste */
+				tile_t* tile = world_get_tile(world, current_cell->x, current_cell->y);
+				if(tile->waste != 255)
+				{
+					++tile->waste;
+					graphics_update_world_image(current_cell->x, current_cell->y, tile);
+				}
 			}
+			else
+				cell_kill(current_cell);
 		}
 
 		++time;
