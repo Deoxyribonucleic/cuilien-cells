@@ -33,6 +33,9 @@ void eat(c_cpu_t* cpu)
 	else
 	{
 		cpu->context->reg.a = 0;
+		if(current_cell->mass > 0)
+			--current_cell->mass;
+		//cell_kill(current_cell); // punish harder
 	}
 }
 

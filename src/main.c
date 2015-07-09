@@ -91,7 +91,7 @@ int main(int argc, char** args)
 			assert(cpu->context->memory != NULL);
 
 			int step;
-			for(step = 0; step < 100; ++step)
+			for(step = 0; step < 100 && current_cell->alive; ++step)
 			{
 				c_cpu_step(cpu);
 			}
