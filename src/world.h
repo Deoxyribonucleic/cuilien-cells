@@ -13,6 +13,7 @@ typedef struct tile
 {
 	uint8_t food;
 	uint8_t waste;
+	uint8_t waste_decay_counter;
 	cell_t* cell;
 } tile_t;
 

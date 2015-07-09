@@ -6,7 +6,7 @@
 
 #define min(a, b) (a > b ? b : a)
 
-#define WASTE_TO_FOOD_INTERVAL 100
+#define WASTE_TO_FOOD_INTERVAL 30
 #define WASTE_TO_FOOD_PER_TICK 1
 
 
@@ -65,19 +65,18 @@ int world_remove_food(world_t* world, int x, int y)
 
 void world_update_waste(world_t* world)
 {
-	static int skipped = 0;
-	
-	if(++skipped == WASTE_TO_FOOD_INTERVAL)
-		skipped = 0;
-	else
-		return;
-
 	int x,y;
 	for(y=0; y<WORLD_HEIGHT; ++y)
 	{
 		for(x=0; x<WORLD_WIDTH; ++x)
 		{
 			tile_t* tile = &world->grid[y * WORLD_WIDTH + x];
+
+			if(tile->waste && ++tile->waste_decay_counter == WASTE_TO_FOOD_INTERVAL)
+				tile->waste_decay_counter = 0;
+			else
+				continue;
+
 			int waste = min(WASTE_TO_FOOD_PER_TICK, tile->waste);
 			if(tile->food + waste <= 255)
 			{
