@@ -78,6 +78,8 @@ int main(int argc, char** args)
 	
 	while(!graphics_update() && cells_get_count())
 	{
+		world_update_waste(world);
+
 		// simulate and render cells
 		/* this turned out messier than I had envisioned it */
 		int i = 0;
@@ -96,6 +98,12 @@ int main(int argc, char** args)
 			
 			// mass decay
 			--current_cell->mass;
+			tile_t* tile = world_get_tile(world, current_cell->x, current_cell->y);
+			if(tile->waste != 255)
+			{
+				++tile->waste;
+				graphics_update_world_image(current_cell->x, current_cell->y, tile);
+			}
 
 			graphics_render_cell(current_cell);
 

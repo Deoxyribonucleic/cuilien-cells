@@ -4,6 +4,11 @@
 
 #include "graphics.h"
 
+#define min(a, b) (a > b ? b : a)
+
+#define WASTE_TO_FOOD_INTERVAL 100
+#define WASTE_TO_FOOD_PER_TICK 1
+
 
 int world_load(world_t** world, char const* filename)
 {
@@ -26,6 +31,7 @@ int world_load(world_t** world, char const* filename)
 		{
 			world_get_tile(*world, x, y)->food =
 				((uint8_t*)surface->pixels)[(y * surface->w + x) * 4];
+			world_get_tile(*world, x, y)->waste = 0;
 		}
 
 	SDL_FreeSurface(surface);
@@ -53,6 +59,32 @@ int world_remove_food(world_t* world, int x, int y)
 	else
 	{
 		return 0;
+	}
+}
+
+void world_update_waste(world_t* world)
+{
+	static int skipped = 0;
+	
+	if(++skipped == WASTE_TO_FOOD_INTERVAL)
+		skipped = 0;
+	else
+		return;
+
+	int x,y;
+	for(y=0; y<WORLD_HEIGHT; ++y)
+	{
+		for(x=0; x<WORLD_WIDTH; ++x)
+		{
+			tile_t* tile = &world->grid[y * WORLD_WIDTH + x];
+			int waste = min(WASTE_TO_FOOD_PER_TICK, tile->waste);
+			if(tile->food + waste <= 255)
+			{
+				tile->waste -= waste;
+				tile->food += waste;
+				graphics_update_world_image(x, y, tile);
+			}
+		}
 	}
 }
 
