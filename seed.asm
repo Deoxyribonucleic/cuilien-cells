@@ -29,7 +29,7 @@ nop
 ;mov b, a
 
 ; move in random direction (INT 0 = rand)
-int 0
+; int 0
 nop
 nop
 nop

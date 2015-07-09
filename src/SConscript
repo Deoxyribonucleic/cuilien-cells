@@ -8,6 +8,7 @@ graphics.c
 cell.c
 world.c
 interaction.c
+mutate.c
 """)
 
 

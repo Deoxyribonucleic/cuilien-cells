@@ -3,8 +3,8 @@
 #include "cell.h"
 #include "world.h"
 
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 900
 
 #define GRAY(value) (value | (value << 8) | (value << 16))
 

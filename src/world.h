@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#define WORLD_WIDTH 640
-#define WORLD_HEIGHT 480
+#define WORLD_WIDTH 1280
+#define WORLD_HEIGHT 900
 
 
 typedef struct tile

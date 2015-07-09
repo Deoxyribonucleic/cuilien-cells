@@ -1,6 +1,7 @@
 #include "interaction.h"
 #include "cell.h"
 #include "world.h"
+#include "mutate.h"
 
 #include "vm/cpu.h"
 
@@ -72,7 +73,7 @@ void split(c_cpu_t* cpu)
 		if(x >= WORLD_WIDTH)
 			x -= 2;
 
-		cell_spawn(c_mem_copy(current_cell->process.context.memory),
+		cell_spawn(mutate(c_mem_copy(current_cell->process.context.memory)),
 					current_cell->color, half_mass, x, current_cell->y);
 	}
 }

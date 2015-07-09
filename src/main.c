@@ -53,7 +53,7 @@ int main(int argc, char** args)
 	}
 	
 	printf("Creating world...\n");
-	world_load(&world, "terrain.bmp");
+	world_load(&world, "terrain3.bmp");
 	graphics_init_world_image(world);
 
 	printf("Spawning inital cells...\n");

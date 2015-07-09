@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#define MAX_CELLS	1000
+#define MAX_CELLS	10000
 
 
 cell_t cells[MAX_CELLS];
