@@ -18,10 +18,15 @@ typedef struct cell
 		uint8_t mass;
 		uint8_t alive;
 	};
+
+	uint16_t generation, times_split;
+	uint32_t birth, death;
+	uint8_t save;
 } cell_t;
 
-cell_t* cell_spawn(c_mem_handle program, uint32_t color, uint8_t mass, int x, int y);
+cell_t* cell_spawn(c_mem_handle program, uint16_t generation, uint32_t color, uint8_t mass, int x, int y);
 int cell_kill(cell_t* cell);
+uint32_t cell_lifetime(cell_t* cell);
 
 cell_t* cell_next(int* i);
 

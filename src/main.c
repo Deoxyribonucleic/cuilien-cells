@@ -21,7 +21,9 @@
 
 
 cell_t* current_cell = NULL;
+cell_t* champion_cell = NULL;
 world_t* world = NULL;
+uint32_t time = 0;
 
 
 int main(int argc, char** args)
@@ -59,20 +61,22 @@ int main(int argc, char** args)
 	}
 	
 	printf("Creating world...\n");
-	world_load(&world, "abundance.bmp");
+	world_load(&world, "terrain3.bmp");
 	graphics_init_world_image(world);
 
 	printf("Spawning inital cells...\n");
 	cells_init();
 
-	cell_spawn(c_mem_copy(seed), 0x00ff00, 5, 180, 200);
-	cell_spawn(c_mem_copy(seed), 0xff0000, 5, 1000, 200);
-	cell_spawn(c_mem_copy(seed), 0x00ffff, 5, 180, 600);
-	cell_spawn(c_mem_copy(seed), 0xffff00, 5, 1000, 600);
+	champion_cell = cell_spawn(c_mem_copy(seed), 1, 0x00ff00, 5, 180, 200);
+	champion_cell->save = true;
+
+	cell_spawn(c_mem_copy(seed), 1, 0xff0000, 5, 1000, 200);
+	// cell_spawn(c_mem_copy(seed), 0x0000ff, 5, 180, 600);
+	// cell_spawn(c_mem_copy(seed), 0xffff00, 5, 1000, 600);
 	
 	printf("Ready.\n");
 	
-	while(!graphics_update())
+	while(!graphics_update() && cells_get_count())
 	{
 		// simulate and render cells
 		/* this turned out messier than I had envisioned it */
@@ -95,10 +99,40 @@ int main(int argc, char** args)
 
 			graphics_render_cell(current_cell);
 
+			if(current_cell != champion_cell &&
+					cell_lifetime(current_cell) > cell_lifetime(champion_cell))
+			{
+				champion_cell->save = false;
+				if(!champion_cell->alive)
+					cell_kill(champion_cell);
+
+				current_cell->save = true;
+				champion_cell = current_cell;
+			}
+
 			if(!current_cell->alive)
-				cell_kill(current_cell); // how do you kill... that which has no life?
+			{
+				current_cell->death = time;
+				
+				if(!current_cell->save)
+					cell_kill(current_cell); // how do you kill... that which has no life?
+			}
 		}
+
+		++time;
 	}
+
+	printf("Champion: \n");
+	printf(" * Color: %06X\n", champion_cell->color);
+	printf(" * Generation: %d\n", champion_cell->generation);
+	printf(" * Times split: %d\n", champion_cell->times_split);
+	printf(" * Cycles lived: %d\n", cell_lifetime(champion_cell));
+	printf(" * Time of birth: %d\n", champion_cell->birth);
+	if(champion_cell->alive)
+		printf(" * Time of death: ALIVE\n");
+	else
+		printf(" * Time of death: %d\n", champion_cell->death);
+	printf(" * Place of death: %d, %d\n", champion_cell->x, champion_cell->y);
 	
 	printf("Freeing memory...\n");
 	cells_free();

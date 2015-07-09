@@ -73,8 +73,9 @@ void split(c_cpu_t* cpu)
 		if(x >= WORLD_WIDTH)
 			x -= 2;
 
+		++current_cell->times_split;
 		cell_spawn(mutate(c_mem_copy(current_cell->process.context.memory)),
-					current_cell->color, half_mass, x, current_cell->y);
+					current_cell->generation + 1, current_cell->color, half_mass, x, current_cell->y);
 	}
 }
 
