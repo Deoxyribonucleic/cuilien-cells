@@ -59,14 +59,16 @@ int main(int argc, char** args)
 	}
 	
 	printf("Creating world...\n");
-	world_load(&world, "terrain3.bmp");
+	world_load(&world, "abundance.bmp");
 	graphics_init_world_image(world);
 
 	printf("Spawning inital cells...\n");
 	cells_init();
 
-	cell_spawn(c_mem_copy(seed), 0x00ff00, 5, 180, 180);
-	cell_spawn(c_mem_copy(seed), 0xff0000, 5, 500, 180);
+	cell_spawn(c_mem_copy(seed), 0x00ff00, 5, 180, 200);
+	cell_spawn(c_mem_copy(seed), 0xff0000, 5, 1000, 200);
+	cell_spawn(c_mem_copy(seed), 0x00ffff, 5, 180, 600);
+	cell_spawn(c_mem_copy(seed), 0xffff00, 5, 1000, 600);
 	
 	printf("Ready.\n");
 	

@@ -5,6 +5,8 @@
 #include "vm/process.h"
 #include "vm/mem.h"
 
+#define MAX_CELLS	500
+
 
 typedef struct cell
 {
@@ -25,6 +27,7 @@ cell_t* cell_next(int* i);
 
 void cells_init();
 void cells_free();
+int cells_get_count();
 
 #endif
 

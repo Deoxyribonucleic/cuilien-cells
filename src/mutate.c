@@ -18,7 +18,7 @@ c_mem_handle mutate(c_mem_handle dna)
 		int b;
 		for(b = 0; b < C_PAGE_SIZE; ++b)
 		{
-			if(rand() % 100 < 5)
+			if(rand() % 100 < 1)
 			{
 				/* BEWARE! Little-endian trickery ahead */
 				if((page->id * C_PAGE_SIZE + b) % 12 == 1); /* don't mess with second byte of opcode */
