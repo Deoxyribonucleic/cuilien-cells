@@ -1,7 +1,6 @@
 #include "interaction.h"
 #include "cell.h"
 #include "world.h"
-#include "mutate.h"
 
 #include "vm/cpu.h"
 
@@ -19,27 +18,7 @@ void random(c_cpu_t* cpu)
 
 void move(c_cpu_t* cpu)
 {
-	switch(cpu->context->reg.a % 4)
-	{
-	case 0:
-		if(++current_cell->x >= WORLD_WIDTH)
-			current_cell->x = WORLD_WIDTH - 1;
-		break;
-	case 1:
-		if(++current_cell->y >= WORLD_HEIGHT)
-			current_cell->y = WORLD_HEIGHT - 1;
-		break;
-	case 2:
-		if(--current_cell->x < 0)
-			current_cell->x = 0;
-		break;
-	case 3:
-		if(--current_cell->y < 0)
-			current_cell->y = 0;
-		break;
-	default:
-		break;
-	}
+	cpu->context->reg.a = cell_move(current_cell, cpu->context->reg.a % 4);
 }
 
 void eat(c_cpu_t* cpu)
@@ -64,20 +43,7 @@ void get_mass(c_cpu_t* cpu)
 
 void split(c_cpu_t* cpu)
 {
-	if(current_cell->mass > 5 && cells_get_count() != MAX_CELLS) // arbitrary threshold
-	{
-		printf("Split\n");
-		int half_mass = current_cell->mass / 2;
-		current_cell->mass -= half_mass;
-
-		int x = current_cell->x + 1;
-		if(x >= WORLD_WIDTH)
-			x -= 2;
-
-		++current_cell->times_split;
-		cell_spawn(mutate(c_mem_copy(current_cell->process.context.memory)),
-					current_cell->generation + 1, current_cell->color, half_mass, x, current_cell->y);
-	}
+	cpu->context->reg.a = cell_split(current_cell);
 }
 
 

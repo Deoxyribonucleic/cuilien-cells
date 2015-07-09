@@ -32,6 +32,7 @@ int world_load(world_t** world, char const* filename)
 			world_get_tile(*world, x, y)->food =
 				((uint8_t*)surface->pixels)[(y * surface->w + x) * 4];
 			world_get_tile(*world, x, y)->waste = 0;
+			world_get_tile(*world, x, y)->cell = NULL;
 		}
 
 	SDL_FreeSurface(surface);

@@ -1,4 +1,6 @@
 #include "cell.h"
+#include "world.h"
+#include "mutate.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -6,7 +8,9 @@
 
 
 cell_t cells[MAX_CELLS];
+
 extern uint32_t time; // main.c (sorry)
+extern world_t* world;
 
 cell_t* cell_spawn(c_mem_handle dna, uint16_t generation, uint32_t color, uint8_t mass, int x, int y)
 {
@@ -32,6 +36,8 @@ cell_t* cell_spawn(c_mem_handle dna, uint16_t generation, uint32_t color, uint8_
 	cell->x = x;
 	cell->y = y;
 
+	world_get_tile(world, x, y)->cell = cell;
+
 	cell->generation = generation;
 	cell->birth = time;
 	cell->death = 0;
@@ -53,6 +59,8 @@ int cell_kill(cell_t* cell)
 {
 	cell->alive = 0;
 	cell->death = time;
+
+	world_get_tile(world, cell->x, cell->y)->cell = NULL;
 
 	if(!cell->save)
 		cell_free(cell);
@@ -116,3 +124,71 @@ int cells_get_count()
 	return count;
 }
 
+int cell_move(cell_t* cell, int direction)
+{
+	int x = cell->x, y = cell->y;
+	switch(direction)
+	{
+	case 0:
+		++x;
+		break;
+	case 1:
+		++y;
+		break;
+	case 2:
+		--x;
+		break;
+	case 3:
+		--y;
+		break;
+	default:
+		break;
+	}
+
+	if(x >= 0 && x < WORLD_WIDTH && y >= 0 && y < WORLD_HEIGHT &&
+			world_get_tile(world, x, y)->cell == NULL)
+	{
+		world_get_tile(world, cell->x, cell->y)->cell = NULL;
+		cell->x = x;
+		cell->y = y;
+		world_get_tile(world, cell->x, cell->y)->cell = cell;
+		return 1;
+	}
+
+	return 0;
+}
+
+int cell_split(cell_t* cell)
+{
+	if(cell->mass > 5 && cells_get_count() != MAX_CELLS) // arbitrary threshold
+	{
+		int half_mass = cell->mass / 2;
+		cell->mass -= half_mass;
+
+		int x;
+		int y;
+		int found = 0;
+		for(y = cell->y - 1; y <= cell->y + 1 && !found; ++y)
+			for(x = cell->x - 1; x <= cell->x + 1; ++x)
+				if(x >= 0 && x < WORLD_WIDTH &&
+				   y >= 0 && y < WORLD_HEIGHT &&
+				   world_get_tile(world, x, y)->cell == NULL)
+				{
+					found = 1;
+					break;
+				}
+
+		/* no free tile */
+		if(!found)
+			return 0;
+
+		printf("Split\n");
+		++cell->times_split;
+		cell_spawn(mutate(c_mem_copy(cell->process.context.memory)),
+					cell->generation + 1, cell->color, half_mass, x, cell->y);
+
+		return 1;
+	}
+
+	return 0;
+}

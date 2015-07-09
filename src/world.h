@@ -1,6 +1,8 @@
 #ifndef _WORLD_H_
 #define _WORLD_H_
 
+#include "cell.h"
+
 #include <stdint.h>
 
 #define WORLD_WIDTH 1280
@@ -11,6 +13,7 @@ typedef struct tile
 {
 	uint8_t food;
 	uint8_t waste;
+	cell_t* cell;
 } tile_t;
 
 typedef struct world
