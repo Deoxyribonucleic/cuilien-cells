@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#define MAX_CELLS	10000
+#define MAX_CELLS	500
 
 
 cell_t cells[MAX_CELLS];
@@ -18,6 +18,7 @@ cell_t* cell_spawn(c_mem_handle dna, uint32_t color, uint8_t mass, int x, int y)
 	if(i == MAX_CELLS)
 	{
 		printf("Max cell count reached.\n");
+		c_mem_free(dna);
 		return NULL;
 	}
 	cell = &cells[i];
