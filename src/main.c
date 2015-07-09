@@ -7,6 +7,7 @@
 #include "vm/scheduler.h"
 #include "vm/process.h"
 #include "vm/debug.h"
+#include "vm/instr.h"
 #include "vm/interrupt.h"
 
 #include "graphics.h"
@@ -37,6 +38,11 @@ int main(int argc, char** args)
 		c_error_print(c_error_last);
 		return 1;
 	}
+	
+	printf("Disabling a few opcodes...\n");
+	c_instruction_vector[C_INSTR_PUTC] = NULL;
+	c_instruction_vector[C_INSTR_GETC] = NULL;
+	c_instruction_vector[C_INSTR_SHOW] = NULL;
 
 	printf("Initializing IVT...\n");
 	cpu->ivt = build_ivt();
