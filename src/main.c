@@ -18,16 +18,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <time.h>
 
 
 cell_t* current_cell = NULL;
 cell_t* champion_cell = NULL;
 world_t* world = NULL;
-uint32_t time = 0;
+uint32_t cycle = 0;
 
 
 int main(int argc, char** args)
 {
+	srand(time(NULL));
+
 	int error;
 	c_cpu_handle cpu;
 	
@@ -128,7 +131,7 @@ int main(int argc, char** args)
 				cell_kill(current_cell);
 		}
 
-		++time;
+		++cycle;
 	}
 
 	printf("Champion: \n");

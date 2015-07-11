@@ -9,7 +9,7 @@
 
 cell_t cells[MAX_CELLS];
 
-extern uint32_t time; // main.c (sorry)
+extern uint32_t cycle; // main.c (sorry)
 extern world_t* world;
 
 cell_t* cell_spawn(c_mem_handle dna, uint16_t generation, uint32_t color, uint8_t mass, int x, int y)
@@ -39,7 +39,7 @@ cell_t* cell_spawn(c_mem_handle dna, uint16_t generation, uint32_t color, uint8_
 	world_get_tile(world, x, y)->cell = cell;
 
 	cell->generation = generation;
-	cell->birth = time;
+	cell->birth = cycle;
 	cell->death = 0;
 	cell->save = false;
 	cell->times_split = 0;
@@ -58,7 +58,7 @@ cell_t* cell_spawn(c_mem_handle dna, uint16_t generation, uint32_t color, uint8_
 int cell_kill(cell_t* cell)
 {
 	cell->alive = 0;
-	cell->death = time;
+	cell->death = cycle;
 
 	world_get_tile(world, cell->x, cell->y)->cell = NULL;
 
@@ -81,7 +81,7 @@ uint32_t cell_lifetime(cell_t* cell)
 	int death = cell->death;
 	if(cell->alive)
 	{
-		death = time;
+		death = cycle;
 	}
 	return death - cell->birth;
 }
