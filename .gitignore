@@ -6,3 +6,4 @@ build/
 *.cx
 *.hex
 *.dump
+champion*
