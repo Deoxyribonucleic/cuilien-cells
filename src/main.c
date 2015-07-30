@@ -54,7 +54,7 @@ int main(int argc, char** args)
 
 	printf("Loading seed...\n");
 	c_mem_handle seed = c_mem_init(MAX_CELL_MEMORY);
-	c_mem_load_file(seed, "seed.cx", 12);
+	c_mem_load_file(seed, "seed2.cx", 12);
 
 	printf("Setting up graphics...\n");
 	if((error = graphics_init()))

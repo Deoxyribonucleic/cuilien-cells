@@ -6,7 +6,7 @@
 
 #define min(a, b) (a > b ? b : a)
 
-#define WASTE_TO_FOOD_INTERVAL 30
+#define WASTE_TO_FOOD_INTERVAL 10
 #define WASTE_TO_FOOD_PER_TICK 1
 
 
